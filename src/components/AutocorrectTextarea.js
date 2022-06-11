@@ -1,4 +1,4 @@
-import React, { useCallback, useRef} from "react";
+import React, { useCallback, useRef } from "react";
 
 const correctionsObj = {
   realy: "really",
