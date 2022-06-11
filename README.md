@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Autocorrector
+
+Text area input that will correct wrong words for you. depending on the corrections object you pass as a parameter.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
