@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef} from "react";
 
 const correctionsObj = {
   realy: "really",
-  wierd: "weird",
+  wweird: "weird",
 };
 
-const getWordCorrected = (word, correctionsObj = {}) => {
+const getWordCorrected = word => {
   if (Object.keys(correctionsObj)?.length) {
     const wordCorrected = correctionsObj[word];
     if (!wordCorrected) return;
@@ -16,42 +16,23 @@ const getWordCorrected = (word, correctionsObj = {}) => {
 const getTextCorrected = (refInput, currentWord, wordCorrected) =>
   refInput.current.value.replace(currentWord, wordCorrected);
 
-const deleteCharacter = prev => {
-  if (prev.length) return prev.slice(0, prev.length - 1);
-  return "";
-};
-
-const addCharacter = (prev, key) => prev + key;
-
-const evaluateWord = (
-  currentWord,
-  correctionsObj,
-  inputRef,
-  setCurrentWord
-) => {
-  const wordCorrected = getWordCorrected(currentWord, correctionsObj);
+const evaluateWord = refInput => {
+  const lastWordTyped = refInput.current.value.split(" ").pop();
+  const wordCorrected = getWordCorrected(lastWordTyped, correctionsObj);
   if (wordCorrected)
-    inputRef.current.value = getTextCorrected(
-      inputRef,
-      currentWord,
+    refInput.current.value = getTextCorrected(
+      refInput,
+      lastWordTyped,
       wordCorrected
     );
-  setCurrentWord("");
 };
 
 export const AutocorrectTextarea = () => {
-  const [currentWord, setCurrentWord] = useState("");
   const textArea = useRef(null);
 
-  const handleCorrector = useCallback(
-    ({ key }) => {
-      if (key === " ")
-        evaluateWord(currentWord, correctionsObj, textArea, setCurrentWord);
-      else if (key === "Backspace") setCurrentWord(deleteCharacter);
-      else setCurrentWord(prev => addCharacter(prev, key));
-    },
-    [currentWord]
-  );
+  const handleCorrector = useCallback(({ key }) => {
+    if (key === " ") evaluateWord(textArea);
+  }, []);
 
   return (
     <div
